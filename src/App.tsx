@@ -11,7 +11,7 @@ export default function () {
           can mint $SPAM below.
         </div>
         <p>
-          There will always be only 6,942,000 $SPAM that can be minted.
+          There will always be only 9,442,000 $SPAM that can be minted.
           Farcaster claims don't use up the mint cap. For 1 ETH you will get
           100,000 $SPAM.
         </p>
