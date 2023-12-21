@@ -5,7 +5,6 @@ import Link from 'components/Link'
 import env from 'helpers/env'
 
 export default function () {
-  const [amount, setAmount] = useState(1000)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [actionSuccess, setActionSuccess] = useState(false)
@@ -51,23 +50,19 @@ export default function () {
 
   return (
     <>
-      <input
-        type="number"
-        class="input input-bordered w-full"
-        placeholder="How much $SPAM do you want?"
-        min={0}
-        value={amount}
-        onChange={(e) => setAmount(parseInt(e.currentTarget.value))}
-      />
-      <div class="label">
-        <span class="label-text-alt">
-          Cost: ~{(amount / 100000).toFixed(3)} ETH
-        </span>
-      </div>
+      <p>
+        The contract is{' '}
+        <Link url="https://basescan.org/address/0x89ca325bd05f851b2b91b3e9fb2d15a59d3d82c6#writeProxyContract">
+          <span className="break-all">
+            0x10c2820e29c97D380aaAD53C9CB507a840d460a5
+          </span>
+        </Link>{' '}
+        on the Base chain.
+      </p>
       <div className="flex flex-col items-start gap-4 mt-8">
         <Link url="https://dexscreener.com/base/0x10c2820e29c97D380aaAD53C9CB507a840d460a5">
           <button class="btn btn-primary btn-wide btn-lg">
-            👏 Swap $ETH for $SPAM 👏
+            👏 Buy $SPAM 👏
           </button>
         </Link>
         <button
