@@ -11,6 +11,7 @@ export default function () {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
+  const [actionSuccess, setActionSuccess] = useState(false)
   const { isConnected } = useAccount()
   const signer = useEthersSigner()
 
@@ -28,6 +29,44 @@ export default function () {
       })
       await tx.wait()
       setSuccess(true)
+    } catch (error) {
+      console.error(error)
+      setError(error instanceof Error ? error.message : `${error}`)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function eatSpam() {
+    setLoading(true)
+    setActionSuccess(false)
+    try {
+      if (!signer) {
+        throw new Error('No signer')
+      }
+      const contract = Spam__factory.connect(env.VITE_CONTRACT, signer)
+      const tx = await contract.eatSpam()
+      await tx.wait()
+      setActionSuccess(true)
+    } catch (error) {
+      console.error(error)
+      setError(error instanceof Error ? error.message : `${error}`)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function prayToSpamGod() {
+    setLoading(true)
+    setActionSuccess(false)
+    try {
+      if (!signer) {
+        throw new Error('No signer')
+      }
+      const contract = Spam__factory.connect(env.VITE_CONTRACT, signer)
+      const tx = await contract.prayToSpamGod()
+      await tx.wait()
+      setActionSuccess(true)
     } catch (error) {
       console.error(error)
       setError(error instanceof Error ? error.message : `${error}`)
@@ -62,12 +101,34 @@ export default function () {
             {loading ? ' 🤔' : ''}The mint $SPAM button
           </button>
         )}
+        <button
+          class="btn btn-primary btn-wide btn-lg"
+          onClick={eatSpam}
+          disabled={loading}
+        >
+          {loading ? ' 🤔' : ''}Eat some $SPAM
+        </button>
+        <button
+          class="btn btn-primary btn-wide btn-lg"
+          onClick={prayToSpamGod}
+          disabled={loading}
+        >
+          {loading ? ' 🤔' : ''}Pray to the $SPAM God 🙏
+        </button>
         {success && (
           <div role="alert" class="alert alert-success break-all">
             <span role="img" aria-label="success">
               🎉
             </span>{' '}
             You now have +{amount} $SPAM.
+          </div>
+        )}
+        {actionSuccess && (
+          <div role="alert" class="alert alert-success break-all">
+            <span role="img" aria-label="success">
+              🎉
+            </span>{' '}
+            You did something with $SPAM successfully!
           </div>
         )}
         {error && (
