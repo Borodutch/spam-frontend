@@ -1,41 +1,15 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { Spam__factory } from '@borodutch/spam-contract'
-import { ethers } from 'ethers'
-import { useAccount } from 'wagmi'
 import { useEthersSigner } from 'hooks/useEthers'
 import { useState } from 'preact/hooks'
+import Link from 'components/Link'
 import env from 'helpers/env'
 
 export default function () {
   const [amount, setAmount] = useState(1000)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [success, setSuccess] = useState(false)
   const [actionSuccess, setActionSuccess] = useState(false)
-  const { isConnected } = useAccount()
   const signer = useEthersSigner()
-
-  async function mint() {
-    setLoading(true)
-    setError('')
-    setSuccess(false)
-    try {
-      if (!signer) {
-        throw new Error('No signer')
-      }
-      const contract = Spam__factory.connect(env.VITE_CONTRACT, signer)
-      const tx = await contract.mint({
-        value: ethers.parseEther(`${amount / 100000}`),
-      })
-      await tx.wait()
-      setSuccess(true)
-    } catch (error) {
-      console.error(error)
-      setError(error instanceof Error ? error.message : `${error}`)
-    } finally {
-      setLoading(false)
-    }
-  }
 
   async function eatSpam() {
     setLoading(true)
@@ -91,16 +65,11 @@ export default function () {
         </span>
       </div>
       <div className="flex flex-col items-start gap-4 mt-8">
-        <ConnectButton />
-        {isConnected && (
-          <button
-            disabled={loading}
-            class="btn btn-primary btn-wide btn-lg"
-            onClick={mint}
-          >
-            {loading ? ' 🤔' : ''}The mint $SPAM button
+        <Link url="https://dexscreener.com/base/0x10c2820e29c97D380aaAD53C9CB507a840d460a5">
+          <button class="btn btn-primary btn-wide btn-lg">
+            👏 Swap $ETH for $SPAM 👏
           </button>
-        )}
+        </Link>
         <button
           class="btn btn-primary btn-wide btn-lg"
           onClick={eatSpam}
@@ -115,14 +84,6 @@ export default function () {
         >
           {loading ? ' 🤔' : ''}Pray to the $SPAM God 🙏
         </button>
-        {success && (
-          <div role="alert" class="alert alert-success break-all">
-            <span role="img" aria-label="success">
-              🎉
-            </span>{' '}
-            You now have +{amount} $SPAM.
-          </div>
-        )}
         {actionSuccess && (
           <div role="alert" class="alert alert-success break-all">
             <span role="img" aria-label="success">
