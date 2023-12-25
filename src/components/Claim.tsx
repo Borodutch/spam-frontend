@@ -36,6 +36,7 @@ export default function () {
         <li>Every like on a cast increases the claim for the cast by 1%</li>
         <li>So does every recast</li>
         <li>Go use $SPAM in your casts!</li>
+        <li>You can claim every 24 hours 🫦</li>
       </ul>
       <ConnectButton />
       {isConnected && (
