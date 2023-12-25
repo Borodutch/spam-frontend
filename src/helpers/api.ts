@@ -16,7 +16,7 @@ export default async function generateTicket(
   )
     .json()
     .then((res) => {
-      if (res.status >= 400) {
+      if (res.statusCode >= 400) {
         console.log(res)
         throw new Error(res.message)
       }
