@@ -16,6 +16,7 @@ jobs:
       NODE_OPTIONS: '--max_old_space_size=4096'
       VITE_CONTRACT: ${{ secrets.VITE_CONTRACT }}
       VITE_ALCHEMY_BASE: ${{ secrets.VITE_ALCHEMY_BASE }}
+      VITE_BACKEND: ${{ secrets.VITE_BACKEND }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
