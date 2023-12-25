@@ -55,7 +55,7 @@ export default function () {
         {loading ? ' 🤔' : ''}Pray to the $SPAM God 🙏
       </button>
       {actionSuccess && (
-        <div role="alert" class="alert alert-success break-all">
+        <div role="alert" class="alert alert-success">
           <span role="img" aria-label="success">
             🎉
           </span>{' '}

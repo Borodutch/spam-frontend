@@ -60,7 +60,7 @@ export default function ({ signature }: { signature: string }) {
 
   return (
     <>
-      <div role="alert" class="alert alert-success break-all">
+      <div role="alert" class="alert alert-success">
         You have authorized $SPAM! Now let's see if you have any $SPAM to claim
         🫦
       </div>
@@ -74,7 +74,7 @@ export default function ({ signature }: { signature: string }) {
         </button>
       )}
       {ticket && (
-        <div class="alert alert-success break-all flex flex-col gap-4 items-stretch">
+        <div class="alert alert-success flex flex-col gap-4 items-stretch">
           <p>
             You have a ticket to claim {ticket.total} $SPAM! It consists of{' '}
             {ticket.baseAmount} $SPAM for unique casts containing $SPAM,{' '}
@@ -93,7 +93,7 @@ export default function ({ signature }: { signature: string }) {
         </div>
       )}
       {success && (
-        <div role="alert" class="alert alert-success break-all">
+        <div role="alert" class="alert alert-success">
           <span role="img" aria-label="success">
             🎉
           </span>{' '}
