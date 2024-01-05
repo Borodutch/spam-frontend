@@ -76,7 +76,7 @@ export default function ({
   const lastClaimedTimestamp = useAtomValue(lastClaimedTimestampAtom)
   const disabled =
     !!lastClaimedTimestamp &&
-    new Date(Number(lastClaimedTimestamp)).getTime() >
+    new Date(Number(lastClaimedTimestamp)).getTime() >=
       new Date(ticket.fromDate).getTime()
   return (
     <button
