@@ -1,17 +1,20 @@
 import { Spam__factory } from '@borodutch/spam-contract'
 import { ethers } from 'ethers'
+import { generateTicket, getOlderTickets } from 'helpers/api'
 import { useAccount } from 'wagmi'
 import { useEthersSigner } from 'hooks/useEthers'
 import { useState } from 'preact/hooks'
 import GeneratedTicket from 'models/GeneratedTIcket'
+import OlderTicket from 'models/OlderTicket'
+import OlderTickets from 'components/OlderTickets'
 import env from 'helpers/env'
-import generateTicket from 'helpers/api'
 
 export default function ({ signature }: { signature: string }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
   const [ticket, setTicket] = useState<GeneratedTicket | null>(null)
+  const [olderTickets, setOlderTickets] = useState<OlderTicket[] | null>(null)
 
   const { address } = useAccount()
   const signer = useEthersSigner()
@@ -26,6 +29,22 @@ export default function ({ signature }: { signature: string }) {
       setTicket(ticket)
     } catch (error) {
       console.error(error)
+      setError(error instanceof Error ? error.message : `${error}`)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function fetchOlderTickets() {
+    setLoading(true)
+    setError('')
+    try {
+      if (!address) throw new Error('No address found')
+      const tickets = await getOlderTickets(address, signature)
+      setOlderTickets(tickets)
+    } catch (error) {
+      console.error(error)
+      setOlderTickets(null)
       setError(error instanceof Error ? error.message : `${error}`)
     } finally {
       setLoading(false)
@@ -100,11 +119,21 @@ export default function ({ signature }: { signature: string }) {
           You successfully claimed $SPAM! Check your wallet for details 🚀
         </div>
       )}
+      <button
+        class="btn btn-primary btn-lg"
+        onClick={fetchOlderTickets}
+        disabled={loading}
+      >
+        {loading ? ' 🤔' : ''}
+        {olderTickets?.length ? 'Refresh' : 'Get'} older tickets to claim $SPAM
+        ⏳
+      </button>
       {error && (
         <div role="alert" class="alert alert-error break-all">
           {error}
         </div>
       )}
+      {olderTickets?.length && <OlderTickets tickets={olderTickets} />}
     </>
   )
 }
