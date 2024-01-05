@@ -1,13 +1,14 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useAccount } from 'wagmi'
+import { useAtom } from 'jotai'
 import { useEthersSigner } from 'hooks/useEthers'
-import { useState } from 'preact/hooks'
 import ClaimDashboard from 'components/ClaimDashboard'
 import getVerificationMessage from 'helpers/getVerificationMessage'
+import signaturesAtom from 'atoms/signatures'
 
 export default function () {
   const signer = useEthersSigner()
-  const [signature, setSignature] = useState('')
+  const [signatures, setSignatures] = useAtom(signaturesAtom)
   const { address, isConnected } = useAccount()
 
   async function authorize() {
@@ -21,11 +22,13 @@ export default function () {
       const signature = await signer.signMessage(
         getVerificationMessage(address)
       )
-      setSignature(signature)
+      setSignatures((signatures) => ({ ...signatures, [address]: signature }))
     } catch (error) {
       console.error(error)
     }
   }
+
+  const signature = address ? signatures[address] : null
 
   return (
     <div className="flex flex-col items-stetch gap-4">
