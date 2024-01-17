@@ -1,6 +1,6 @@
 import { Spam__factory } from '@borodutch/spam-contract'
 import { useAccount } from 'wagmi'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtom, useSetAtom } from 'jotai'
 import { useEffect } from 'preact/hooks'
 import { useEthersSigner } from 'hooks/useEthers'
 import OlderTicket from 'models/OlderTicket'
@@ -11,7 +11,11 @@ import getDateString from 'helpers/getDateString'
 import lastClaimedTimestampAtom from 'atoms/lastClaimedTimestamp'
 
 function OlderTicketsSuspended({ tickets }: { tickets: OlderTicket[] }) {
-  const lastClaimedTimestamp = useAtomValue(lastClaimedTimestampAtom)
+  const [lastClaimedTimestamp, setLastClaimedTimestamp] = useAtom(
+    lastClaimedTimestampAtom
+  )
+  const { address } = useAccount()
+  const signer = useEthersSigner()
   return (
     <>
       <p>
@@ -37,7 +41,25 @@ function OlderTicketsSuspended({ tickets }: { tickets: OlderTicket[] }) {
                 <td>{getDateString(ticket.toDate)}</td>
                 <td>{ticket.total}</td>
                 <td>
-                  <TicketClaimButton ticket={ticket} />
+                  <TicketClaimButton
+                    ticket={ticket}
+                    refreshClaimTimestamp={() => {
+                      if (!address) {
+                        throw new Error('No address found')
+                      }
+                      if (!signer) {
+                        throw new Error('No signer found')
+                      }
+                      const contract = Spam__factory.connect(
+                        env.VITE_CONTRACT,
+                        signer
+                      )
+                      const bigintAddress = BigInt(address)
+                      setLastClaimedTimestamp(
+                        contract.lastClaimTimestamps(bigintAddress, 0n)
+                      )
+                    }}
+                  />
                 </td>
               </tr>
             ))}
