@@ -34,7 +34,10 @@ export default function () {
     <div className="flex flex-col items-stetch gap-4">
       <h2>NEW 😱 CLAIM $SPAM FOR FARCASTER ACTIVITY!</h2>
       <ul>
-        <li>You get 5 $SPAM for every unique cast containing "$SPAM"</li>
+        <li>
+          You get 5 $SPAM for every unique cast containing "$SPAM" (100
+          $SPAM/claim max)
+        </li>
         <li>Casts that only contain the word $SPAM don't count</li>
         <li>Every like on a cast increases the claim for the cast by 1%</li>
         <li>So does every recast</li>
